@@ -3,12 +3,16 @@ package com.example.ex4;
 
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import static android.content.ContentValues.TAG;
 
 public class TcpClient {
 
@@ -16,7 +20,6 @@ public class TcpClient {
     private int port;
     private Socket socket;
     private Map<String, String> paths = new HashMap<>();
-    private OutputStream outputStream;
     private static TcpClient tcpClientInstance = null;
 
     /**
@@ -69,7 +72,26 @@ public class TcpClient {
      * @param command
      */
     public void sendCommand(final String command) {
+        try {
+            System.out.println(command);
+            Runnable runnable = new Runnable() {
+                PrintWriter printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 
+                @Override
+                public void run() {
+                    if (printWriter != null) {
+                        Log.d(TAG, "Sending: " + command);
+                        printWriter.println(command);
+                        printWriter.flush();
+                    }
+                }
+            };
+            Thread thread = new Thread(runnable);
+            thread.start();
+        } catch (Exception e) {
+            Log.e("TCP", "C: Error", e);
+            close();
+        }
     }
 
     /**
