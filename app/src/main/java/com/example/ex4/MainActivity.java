@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void openJoystick() {
         Intent intent = new Intent(this, JoystickActivity.class);
+
+        EditText ipEditText = (EditText) findViewById(R.id.ipEditText);
+        EditText portEditText = (EditText) findViewById(R.id.portEditText);
+
+        intent.putExtra("ip", ipEditText.getText().toString());
+        intent.putExtra("port", portEditText.getText().toString());
+
         startActivity(intent);
     }
 }
