@@ -5,13 +5,11 @@ import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+
 import static android.content.ContentValues.TAG;
 
 public class TcpClient {
@@ -19,15 +17,13 @@ public class TcpClient {
     private String ip;
     private int port;
     private Socket socket;
-    private Map<String, String> paths = new HashMap<>();
     private static TcpClient tcpClientInstance = null;
+    private PrintWriter printWriter;
 
     /**
      * Constructor.
      */
     public TcpClient() {
-        this.paths.put("Aileron", "/controls/flight/aileron");
-        this.paths.put("Elevator", "/controls/flight/elevator");
     }
 
     /**
@@ -55,7 +51,16 @@ public class TcpClient {
             public void run() {
                 try {
                     InetAddress serverAddress = InetAddress.getByName(ip);
+                    Log.d("TCP Client", "C: Connecting...");
                     socket = new Socket(serverAddress, port);
+                    try {
+                        printWriter = new PrintWriter(new BufferedWriter(
+                                new OutputStreamWriter(socket.getOutputStream())), true);
+                        Log.d(TAG, "Connected!");
+                    } catch (IOException e) {
+                        Log.e("TCP", "C: Error", e);
+                        System.out.println((e.toString()));
+                    }
                 } catch (IOException e) {
                     Log.e("TCP", "C: Error", e);
                     System.out.println((e.toString()));
@@ -72,26 +77,18 @@ public class TcpClient {
      * @param command
      */
     public void sendCommand(final String command) {
-        try {
-            System.out.println(command);
-            Runnable runnable = new Runnable() {
-                PrintWriter printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-
-                @Override
-                public void run() {
-                    if (printWriter != null) {
-                        Log.d(TAG, "Sending: " + command);
-                        printWriter.println(command);
-                        printWriter.flush();
-                    }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (printWriter != null) {
+                    Log.d(TAG, command);
+                    printWriter.println(command);
+                    printWriter.flush();
                 }
-            };
-            Thread thread = new Thread(runnable);
-            thread.start();
-        } catch (Exception e) {
-            Log.e("TCP", "C: Error", e);
-            close();
-        }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
     }
 
     /**

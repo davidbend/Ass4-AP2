@@ -21,9 +21,15 @@ public class JoystickActivity extends AppCompatActivity implements JoystickView.
         TcpClient.Instance().connect(ip, port);
     }
 
+    @Override
     public void onJoystickMoved(float xPercent, float yPercent, int id) {
-        System.out.println("Working...");
-        String command = "Test";
-        TcpClient.Instance().sendCommand(command);
+        TcpClient.Instance().sendCommand("set /controls/flight/elevator " + xPercent + "\r\n");
+        TcpClient.Instance().sendCommand("set /controls/flight/aileron " + yPercent + "\r\n");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TcpClient.Instance().close();
     }
 }
