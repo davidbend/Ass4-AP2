@@ -18,7 +18,7 @@ it displays on the screen.
 #### Instructions
 Run the server code, then launch the application and follow these steps:
 
-In the login activity, enter the following details, and then press 'Connect':
+In the login activity, enter the following details:
 ##### IP:
 ```
 10.0.2.2
@@ -27,4 +27,6 @@ In the login activity, enter the following details, and then press 'Connect':
 ```
 5402
 ```
+Press 'Connect'.
+
 Now, the commands received from the joystick will be printed in the program of the server.
