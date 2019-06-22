@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Runs the joystick.
+     */
     public void openJoystick() {
         Intent intent = new Intent(this, JoystickActivity.class);
 
