@@ -17,6 +17,7 @@ it displays on the screen.
 
 #### Instructions
 Run the server code, then launch the application and follow these steps:
+
 In the login activity, enter the following details, and then press 'Connect':
 ##### IP:
 ```
