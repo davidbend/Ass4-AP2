@@ -1,6 +1,5 @@
 package com.example.ex4;
 
-
 import android.util.Log;
 
 import java.io.BufferedWriter;

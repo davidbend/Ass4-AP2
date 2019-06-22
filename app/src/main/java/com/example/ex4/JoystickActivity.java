@@ -23,6 +23,7 @@ public class JoystickActivity extends AppCompatActivity implements JoystickView.
 
     @Override
     public void onJoystickMoved(float xPercent, float yPercent, int id) {
+        /* Sends the command to the server */
         TcpClient.Instance().sendCommand("set /controls/flight/elevator " + xPercent + "\r\n");
         TcpClient.Instance().sendCommand("set /controls/flight/aileron " + yPercent + "\r\n");
     }
