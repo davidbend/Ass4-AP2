@@ -13,12 +13,14 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
-            TcpListener server = new TcpListener(ipAddress, 1234);
+            var ipAddress =  IPAddress.Parse("127.0.0.1");
+            TcpListener server = new TcpListener(ipAddress, 5402);
             server.Start();
             // as long as we're not pending a cancellation, let's keep accepting requests
             TcpClient client = server.AcceptTcpClient();
 
+            Console.WriteLine("Connected...\n");
+            
             StreamReader clientIn = new StreamReader(client.GetStream());
 
             string msg;
